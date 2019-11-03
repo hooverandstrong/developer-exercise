@@ -1,22 +1,39 @@
 .App {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  height: 100vh;
+  width: 100vw;
+}
+
+.header {
+  background-color: #5b9ce0;
+  height: 8vh;
+}
+
+.footer {
+  background-color: rgba(0,123,255,.25);
+  height: 4vh;
+
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.main {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  width: 100vw;
+  height: 100%;
 }
 
-.App-link {
-  color: #09d3ac;
+.main aside,
+.main div {
+  height: 100%;
+}
+
+.main aside {
+  width: 1vw;
+  background-color: #ddd;
 }
