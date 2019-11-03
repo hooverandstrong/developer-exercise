@@ -20,7 +20,7 @@ You are free to use any resources necessary to complete the task, just be prepar
 
 ### Building and Running
 
-To start the webserver, ruyn
+To start the webserver, run
 
     > npm install
     > npm start 
@@ -40,7 +40,7 @@ It is accessable at the URL `https://www.hooverandstrong.com`, and provides five
 
 Lists the customers in the system
 
-### Get addresses for a customer
+### Get Addresses for a customer
 
     GET /api/mock/customer/:id/addresses
 
@@ -62,6 +62,7 @@ Updates an existing address record.  The Id of the record must be provided. Agai
 
     GET /api/mock/customers/address/options
 
+Retuns arrays of values to be used to populate dropdown boxes.
 
 ## Functional Requirements
 
