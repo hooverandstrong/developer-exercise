@@ -62,7 +62,7 @@ Updates an existing address record.  The Id of the record must be provided. Agai
 
     GET /api/mock/customers/address/options
 
-Retuns arrays of values to be used to populate dropdown boxes.
+Returns arrays of values to be used to populate dropdown boxes.
 
 ## Functional Requirements
 
