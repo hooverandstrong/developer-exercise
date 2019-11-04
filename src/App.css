@@ -7,6 +7,18 @@
   width: 100vw;
 }
 
+h1, h2 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 14px;
+}
+
+h2 {
+  font-size: 12px;
+}
+
 .header {
   background-color: #5b9ce0;
   height: 8vh;
@@ -29,11 +41,74 @@
 }
 
 .main aside,
-.main div {
+.main .center {
   height: 100%;
+  border: 1px solid black;
+}
+
+.main .center {
+  flex-grow: 1;
+  border-width: 1px 0;
+  width: calc(98vw - 4px);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.main .center .grow {
+  flex-grow: 1;
 }
 
 .main aside {
   width: 1vw;
   background-color: #ddd;
+}
+
+.panel { 
+  margin: 10px 10px 0;
+  border: 1px solid black;
+  padding: 10px;
+}
+.panel:last-child {
+  margin: 10px;
+}
+.panel.list {
+  padding: 0;
+}
+
+.panel.list header {
+  padding: 5px 5px 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+input, select {
+  padding: 5px 10px;
+}
+
+table.grid,
+table.data-grid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.grid tbody tr:nth-child(odd) td {
+  background-color: #DDD;
+}
+
+table thead th {
+  text-align: left;
+  font-weight: bold;
+  font-size: smaller;
+}
+
+table.data-grid tbody tr td label {
+  display: none;
+}
+
+table.data-grid tbody tr td input {
+  width: 100%;
 }
