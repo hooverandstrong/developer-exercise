@@ -66,10 +66,10 @@ export default function CustomerList(props) {
         <td><Dropdown name="Type" value={item.Type} options={types} onChange={onChange} /></td>
         <td><TextInput name="Name" value={Address.Name} onChange={onChangeAddress} /></td>
         <td><TextInput name="Street1" value={Address.Street1} onChange={onChangeAddress} /></td>
-        <td><TextInput name="Street2" value={Address.Street2} onChange={onChangeAddress} /></td>
+        <td><TextInput name="Street2" value={Address.Street2} onChange={onChangeAddress} size="3"/></td>
         <td><TextInput name="City" value={Address.City} onChange={onChangeAddress} /></td>
         <td>{region}</td>
-        <td><TextInput name="PostalCode" value={Address.PostalCode} onChange={onChangeAddress} /></td>
+        <td><TextInput name="PostalCode" value={Address.PostalCode} onChange={onChangeAddress} size="6" /></td>
         <td><Dropdown name="Country" value={Address.Country} options={options.Countries} onChange={onChange} /></td>
         <td><button>Disable</button></td>
       </tr>

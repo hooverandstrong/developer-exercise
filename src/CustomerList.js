@@ -7,7 +7,8 @@ import Dropdown from './Dropdown';
 
 export default function CustomerList(props) {
 
-  const [selected, setSelected] = useState(4);//null);
+  const { selected, onChange } = props;
+
   const [list, setList] = useState([]);
 
   useEffect(() => {
@@ -15,13 +16,6 @@ export default function CustomerList(props) {
 
     service.Customers().then(list => setList(list));
   }, []);
-
-  function onChange(event) {
-    const { target } = event;
-    const { value } = target;
-
-    setSelected(value);
-  }
 
   const options = list.map(customer => {
     return {label: customer.CustomerKey, value: customer.Id};

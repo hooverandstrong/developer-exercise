@@ -22,13 +22,31 @@ h2 {
 .header {
   background-color: #5b9ce0;
   height: 8vh;
+
+  display: flex;
+  align-items: center;
+}
+
+.header button {
+  margin-left: 0.5em;
+  padding: 0.25em 0.5em;
 }
 
 .footer {
   background-color: rgba(0,123,255,.25);
   height: 4vh;
 
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.footer .copyright {
+  flex: 5;
   text-align: center;
+}
+.footer .usermenu {
+  flex: 2;
+  text-align: right;
 }
 
 .main {
@@ -86,7 +104,8 @@ h2 {
 }
 
 input, select {
-  padding: 5px 10px;
+  padding: 5px 5px;
+  background-color: white;
 }
 
 table.grid,
