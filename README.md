@@ -1,68 +1,78 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Hoover & Strong Developer Exercise
 
-## Available Scripts
+Thank you for applying for a development position at Hoover & Strong!
 
-In the project directory, you can run:
+## Your task
 
-### `npm start`
+Build this screen used to manage customer addresses. The users of this screen would be employees of Hoover & Strong doing data entry of information provided to them by customers over the phone, on chat, or by email.  Customer data is provided via an **API**, described below.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+You should match, as closely as possible, [the design](./design.pdf). Additionally, you should attempt to implement the **functional requirements**, described below, to the extent possible within the timebox.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+To get you started, this repository contains an empty React app, with a basic layout started. You are free to replace this with anything you like, and you may use any additional libraries you want. Just be sure to provide updated instructions under **Building and Running** if you alter the steps necessary to bring the site online.
 
-### `npm test`
+You should work on a separate branch, once you're done push that branch and let us know about it, either by creating a pull request, or by phone/email.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Timebox / Limits
 
-### `npm run build`
+Please limit yourself to no more than **4 hours** for this exercise. It is more important that you stop at the end of the time limit than it is that you complete the requirements.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+You are free to use any resources necessary to complete the task, just be prepared to talk about the choices you made and why you made them.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+### Building and Running
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To start the webserver, run
 
-### `npm run eject`
+    > npm install
+    > npm start 
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The website will then be visible at ['http://localhost:3000'](http://localhost:3000).
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## API
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+This api provides data about customers and their addresses.
 
-## Learn More
+It is accessable at the URL `https://www.hooverandstrong.com`, and provides five endpoints.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### List Customers
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    GET /api/mock/customers
 
-### Code Splitting
+Lists the customers in the system
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### Get Addresses for a customer
 
-### Analyzing the Bundle Size
+    GET /api/mock/customer/:id/addresses
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+Lists the addresses we have for the specified customer id.
 
-### Making a Progressive Web App
+### Insert a new address
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+    POST /api/mock/customer/:id/address 
 
-### Advanced Configuration
+Create a new address record for the specified customer id, field names should match those provided by the **Get Addresses** endpoint above.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+### Update an existing address
 
-### Deployment
+    PUT /api/mock/customer/:id/address
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+Updates an existing address record.  The Id of the record must be provided. Again the field names should match those provided by the **Get Addresses** endpoint above.
 
-### `npm run build` fails to minify
+### Get options to support dropdowns
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+    GET /api/mock/customers/address/options
+
+Returns arrays of values to be used to populate dropdown boxes.
+
+## Functional Requirements
+
+- The Customer dropdown should be populated with customer keys provided by the **List Customers** API endpoint.
+- Selecting a Customer from the dropdown should load address data from the API. The header will then show 'add', 'save', and 'cancel' buttons.
+ - The **add** button should show a new record at the bottom of the address grid. It should not be persisted until the save button is pressed.
+ - The **save** button should persist each record in the grid, updating records with an Id, and inserting records without.
+ - The **cancel** button should update the dropdown to clear the selected customer, and the data grid and previously used addresses should dissapear, as should the buttons on the header.
+- Addresses will be shown in an editable grid. With dropdowns loaded from data provided by the **Get Options** API endpoint.
+- If a country code is selected that is not equal to "US" the region dropdown should be replaced by a text input.
+- If the ActiveTo field contains a date in the past, or the current date, the address should not be listed in the edit grid, but should be shown below as a **Previously Used Address**
+- If the disable address button is pressed, its ActiveTo field should be set to the current date.
+- If the enable address button is pressed on a disabled address, it's ActiveTo field should be set to the empty string.
