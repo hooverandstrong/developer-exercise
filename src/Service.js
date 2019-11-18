@@ -8,8 +8,13 @@ export default function Service() {
     } 
     return response;
   }
+
   function parse(response) {
     return response.json();
+  }
+
+  function setKeys(list) {
+    return list.map(item => ({...item, key: item.Id}));
   }
 
   function Customers() {
@@ -21,7 +26,8 @@ export default function Service() {
   function CustomerAddresses(id) {
     return fetch(endpoint + `customer/${id}/addresses`)
       .then(checkError)
-      .then(parse);
+      .then(parse)
+      .then(setKeys);
   }
 
   function Save(id, address) {
@@ -29,7 +35,8 @@ export default function Service() {
     if (address.Id) {
       method = "PUT";
     }
-    return fetch(endpoint + `customer/${id}/address`, { method, body: JSON.serialize(method) })
+    address.key = undefined;
+    return fetch(endpoint + `customer/${id}/address`, { method, body: JSON.stringify(address) })
       .then(checkError)
       .then(parse);
   }
@@ -40,5 +47,21 @@ export default function Service() {
       .then(parse);
   }
 
-  return Object.freeze({ Customers, CustomerAddresses, Save, Options });
+  function Create(key) {
+    return {
+      key,
+      Type: "ALT",
+      Address: {
+        Name: "",
+        Street1: "",
+        Street2: "",
+        City: "",
+        State: "",
+        PostalCode: "",
+        Country: "US"
+      }
+    };
+  }
+
+  return Object.freeze({ Customers, CustomerAddresses, Save, Options, Create });
 }

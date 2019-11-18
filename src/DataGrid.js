@@ -5,7 +5,7 @@ export default function DataGrid(props) {
   const { renderHeader, renderLine, data } = props;
 
   function renderLines() {
-    return data.map(item => renderLine(item));
+    return data.map((item, idx) => renderLine(item, idx));
   }
 
   const head = renderHeader();

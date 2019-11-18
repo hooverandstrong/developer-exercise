@@ -1,5 +1,5 @@
-import React, { useState, useReducer, useEffect } from 'react';
-import { LOAD } from './consts';
+import React, { useState, useEffect } from 'react';
+import { LOAD, CHANGE } from './actions';
 import Panel from './Panel';
 import Dropdown from './Dropdown';
 import TextInput from './TextInput';
@@ -10,18 +10,9 @@ import Service from './Service';
 
 export default function CustomerList(props) {
 
-  const { id, name } = props;
+  const { id, name, customerAddresses, dispatch } = props;
 
   const [options, setOptions] = useState({});
-  const [customerAddresses, dispatch] = useReducer((state, action) => {
-    switch(action.type) {
-      case LOAD: 
-        return action.payload;
-
-      default: 
-        return state;
-    }
-  }, []);
 
   useEffect(() => {
     const service = Service();
@@ -31,7 +22,58 @@ export default function CustomerList(props) {
   useEffect(() => {
     const service = Service();
     service.CustomerAddresses(id).then(customerAddresses => dispatch({type: LOAD, payload: customerAddresses}));
-  }, [id]);
+  }, [id, dispatch]);
+
+  function getIndex(list, id, index) {
+    console.log(list, id, index, id ? list.findIndex((item) => item.Id === id) : index);
+    return id ? list.findIndex((item) => item.Id === id) : index;
+  }
+
+  function makeChangeHandler(key) {
+    return (event) => {
+      const { target } = event;
+      const { value, name } = target;
+      const idx = customerAddresses.findIndex((item) => item.key === key);
+      if (idx !== -1) {
+        const item = customerAddresses[idx];
+        dispatch({
+          type: CHANGE,
+          payload: [
+            ...customerAddresses.slice(0, idx),
+            {...item, [name]: value},
+            ...customerAddresses.slice(idx + 1)
+          ]
+        });
+      }
+    };
+  }
+
+  function makeAddressChangeHandler(key) {
+    return (event) => {
+      const { target } = event;
+      const { value, name } = target;
+      const idx = customerAddresses.findIndex((item) => item.key === key);
+      if (idx !== -1) {
+        const item = customerAddresses[idx];
+        const { Address } = item;
+
+        dispatch({
+          type: CHANGE,
+          payload: [
+            ...customerAddresses.slice(0, idx),
+            {
+              ...item,
+              Address: {
+                ...Address,
+                [name]: value
+              }
+            },
+            ...customerAddresses.slice(idx + 1)
+          ]
+        });
+      }
+    };
+  }
 
   function renderHeader() {
     return (
@@ -49,20 +91,19 @@ export default function CustomerList(props) {
     );
   }
 
-
-
   function renderLine(item) {
-    console.log(item);
-    const onChange = () => {};
-    const onChangeAddress = () => {};
+    const onChange = makeChangeHandler(item.key);
+    const onChangeAddress = makeAddressChangeHandler(item.key);
     const { Address } = item;
     const types = Object.keys(options.Types).map(value => ({label: options.Types[value], value}));
     let region = <Dropdown name="Region" value={Address.Region} options={options.USStates} onChange={onChangeAddress} />;
     if (Address.Country !== "US") {
       region = <TextInput name="Region" value={Address.Region} onChange={onChangeAddress} />
     }
+
+    const { key } = item;
     return (
-      <tr key={item.Id}>
+      <tr key={key}>
         <td><Dropdown name="Type" value={item.Type} options={types} onChange={onChange} /></td>
         <td><TextInput name="Name" value={Address.Name} onChange={onChangeAddress} /></td>
         <td><TextInput name="Street1" value={Address.Street1} onChange={onChangeAddress} /></td>
@@ -70,12 +111,13 @@ export default function CustomerList(props) {
         <td><TextInput name="City" value={Address.City} onChange={onChangeAddress} /></td>
         <td>{region}</td>
         <td><TextInput name="PostalCode" value={Address.PostalCode} onChange={onChangeAddress} size="6" /></td>
-        <td><Dropdown name="Country" value={Address.Country} options={options.Countries} onChange={onChange} /></td>
+        <td><Dropdown name="Country" value={Address.Country} options={options.Countries} onChange={onChangeAddress} /></td>
         <td><button>Disable</button></td>
       </tr>
     );
   }
 
+  console.log(customerAddresses);
   function active(item) {
     return item.ActiveTo === undefined || new Date(item.ActiveTo) >= new Date();
   }
@@ -103,34 +145,36 @@ export default function CustomerList(props) {
     dataGrid = <DataGrid renderLine={renderLine} renderHeader={renderHeader} data={activeAddresses} />
   }
 
-  return [
-    <Panel grow list>
-      <header>
-        <h1>Manage addresses for {name}</h1>
-      </header>
-      {dataGrid}
-    </Panel>,
-    <Panel list>
-      <header>
-        <h2>Previously used addresses for {name}</h2>
-      </header>
-      <table className="grid">
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Name</th>
-            <th>Street1</th>
-            <th>Street2</th>
-            <th>City</th>
-            <th>Region</th>
-            <th>Postal Code</th>
-            <th>Country</th>
-            <th>Active</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>{previousAddressRows}</tbody>
-      </table>
-    </Panel>
-  ];
+  return (
+    <>
+      <Panel grow list>
+        <header>
+          <h1>Manage addresses for {name}</h1>
+        </header>
+        {dataGrid}
+      </Panel>
+      <Panel list>
+        <header>
+          <h2>Previously used addresses for {name}</h2>
+        </header>
+        <table className="grid">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Name</th>
+              <th>Street1</th>
+              <th>Street2</th>
+              <th>City</th>
+              <th>Region</th>
+              <th>Postal Code</th>
+              <th>Country</th>
+              <th>Active</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{previousAddressRows}</tbody>
+        </table>
+      </Panel>
+    </>
+  );
 }

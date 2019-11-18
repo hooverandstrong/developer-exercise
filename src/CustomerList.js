@@ -7,7 +7,7 @@ import Dropdown from './Dropdown';
 
 export default function CustomerList(props) {
 
-  const { selected, onChange } = props;
+  const { selected, setSelected, customerAddresses, dispatch } = props;
 
   const [list, setList] = useState([]);
 
@@ -17,6 +17,13 @@ export default function CustomerList(props) {
     service.Customers().then(list => setList(list));
   }, []);
 
+  function onChange(event) {
+    const { target } = event;
+    const { value } = target; 
+
+    setSelected(value);
+  }
+
   const options = list.map(customer => {
     return {label: customer.CustomerKey, value: customer.Id};
   });
@@ -24,7 +31,7 @@ export default function CustomerList(props) {
   let addresses; 
   if (selected && list.length > 0) {
     const customer = list.find(item => item.Id === selected-0);
-    addresses = <CustomerAddresses id={selected} name={customer.CustomerKey} />
+    addresses = <CustomerAddresses id={selected} name={customer.CustomerKey} customerAddresses={customerAddresses} dispatch={dispatch} />
   };
 
   return (
