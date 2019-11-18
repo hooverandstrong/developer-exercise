@@ -5,6 +5,7 @@ import Dropdown from './Dropdown';
 import TextInput from './TextInput';
 import Loading from './Loading';
 import DataGrid from './DataGrid';
+import { RESTORE, DISABLE } from './actions';
 
 import Service from './Service';
 
@@ -23,11 +24,6 @@ export default function CustomerList(props) {
     const service = Service();
     service.CustomerAddresses(id).then(customerAddresses => dispatch({type: LOAD, payload: customerAddresses}));
   }, [id, dispatch]);
-
-  function getIndex(list, id, index) {
-    console.log(list, id, index, id ? list.findIndex((item) => item.Id === id) : index);
-    return id ? list.findIndex((item) => item.Id === id) : index;
-  }
 
   function makeChangeHandler(key) {
     return (event) => {
@@ -112,7 +108,7 @@ export default function CustomerList(props) {
         <td>{region}</td>
         <td><TextInput name="PostalCode" value={Address.PostalCode} onChange={onChangeAddress} size="6" /></td>
         <td><Dropdown name="Country" value={Address.Country} options={options.Countries} onChange={onChangeAddress} /></td>
-        <td><button>Disable</button></td>
+        <td>{item.Id ? <button onClick={() => dispatch({type: DISABLE, payload: item.Id})}>Disable</button>: null}</td>
       </tr>
     );
   }
@@ -135,7 +131,7 @@ export default function CustomerList(props) {
         <td>{previous.Address.PostalCode}</td>
         <td>{previous.Address.Country}</td>
         <td>{previous.ActiveFrom} - {previous.ActiveTo}</td>
-        <td><button>Restore</button></td>
+        <td><button onClick={() => dispatch({type: RESTORE, payload: previous.Id})}>Restore</button></td>
       </tr>
     );
   });
